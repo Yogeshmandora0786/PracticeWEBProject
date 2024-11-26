@@ -18,13 +18,13 @@ namespace PracticeWEBProjectApi.REPOSITORY
             _configuration = configuration;
         }
 
-        public async Task<List<RegistrationDTO>> Registration_All(int id)
+        public async Task<List<RegistrationDTO>> Registration_All()
         {
             using (var connection = _dBContext.CreateConnection())
             {
                 try
                 {
-                    var reg = await connection.QueryAsync<RegistrationDTO>("sp_Registration_All", new { Id = id }, commandType: CommandType.StoredProcedure);
+                    var reg = await connection.QueryAsync<RegistrationDTO>("sp_Registration_All", commandType: CommandType.StoredProcedure);
                     return reg.ToList();
                 }
                 catch (Exception ex)

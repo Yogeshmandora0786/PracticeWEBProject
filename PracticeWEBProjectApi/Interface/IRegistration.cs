@@ -5,7 +5,7 @@ namespace PracticeWEBProjectApi.Interface
 {
     public interface IRegistration
     {
-        Task<List<RegistrationDTO>> Registration_All(int id);
+        Task<List<RegistrationDTO>> Registration_All();
 
         Task<RegistrationDTO> Registration_Upsert(RegistrationDTO reg);
 

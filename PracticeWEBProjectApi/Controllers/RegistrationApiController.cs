@@ -16,23 +16,17 @@ namespace PracticeWEBProjectApi.Controllers
             _registrationService = registrationService;
         }
         [HttpGet]
-        [Route("Registration_All/{Id}")]
-        public async Task<IActionResult> GetRegistration(int Id)
+        [Route("Registration_All")]
+        public async Task<IActionResult> GetAllRegistrations()
         {
             try
             {
-                var result = await _registrationService.Registration_All(Id);
-
-                if (result == null || !result.Any())
-                {
-                    return NotFound("No registrations found.");
-                }
-
-                return Ok(result);
+                var registrations = await _registrationService.Registration_All();
+                return Ok(registrations);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, new { message = "An error occurred while retrieving registrations.", details = ex.Message });
             }
         }
         [HttpPost]
