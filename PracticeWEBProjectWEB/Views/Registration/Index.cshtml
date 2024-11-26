@@ -16,7 +16,7 @@
     <div class="wrapper">
         <!-- Sign-Up Form -->
         <div class="form-wrapper sign-up">
-            <form id="signUpForm" method="post" action="@Url.Action("Index", "Registration")">
+            <form id="signUpForm">
                 <h2>Sign Up</h2>
 
                 <!-- Username Input -->
@@ -105,7 +105,7 @@
 
             // AJAX request to send form data to the backend
             $.ajax({
-                url: 'https://localhost:7146/api/Registration_Upsert', // Replace with your actual backend URL
+                url:'https://localhost:7146/api/Registration_Upsert' , // Replace with your actual backend URL
                 type: 'POST',
                 data: formData,
                 contentType: false,
@@ -154,7 +154,7 @@
             document.getElementById(id).type = "password";
         }
     </script>
-    <script src="~/js/site.js"></script>
+   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
