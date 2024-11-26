@@ -51,5 +51,30 @@ namespace PracticeWEBProjectApi.REPOSITORY
             }
         }
 
+        public async Task<LoginDTO> Login_Upsert(LoginDTO login)
+        {
+            using (var connection = _dBContext.CreateConnection())
+            {
+                try
+                {
+                    // Define the parameters for the stored procedure
+                    DynamicParameters param = new DynamicParameters();
+                    param.Add("@Id", login.Id, dbType: DbType.Int32, direction: ParameterDirection.Input);
+                    param.Add("@UserName", login.UserName, dbType: DbType.String, direction: ParameterDirection.Input);
+                    param.Add("@Password", login.Password, dbType: DbType.String, direction: ParameterDirection.Input);
+                   
+
+                    // Execute the stored procedure and retrieve the result
+                    var task = await connection.QueryMultipleAsync("sp_Login_Upsert", param, commandTimeout: 600, commandType: CommandType.StoredProcedure);
+                    return task.Read<LoginDTO>().FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"An error occurred while upserting login: {ex.Message}", ex);
+                }
+            }
+        }
+
+
     }
 }

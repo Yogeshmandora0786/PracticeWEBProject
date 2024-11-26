@@ -46,12 +46,12 @@ namespace PracticeWEBProjectApi.Controllers
         }
 
         [HttpPost]
-        [Route("Registration_Delete")]
-        public async Task<IActionResult> Registration_Delete(RegistrationDTO reg)
+        [Route("Registration_Delete/{Id}")]
+        public async Task<IActionResult> Registration_Delete(RegistrationDTO reg, int id)
         {
             try
             {
-                var res = await _registrationService.Registration_Delete(reg);
+                var res = await _registrationService.Registration_Delete(reg ,id);
 
                 return Ok(res);
             }

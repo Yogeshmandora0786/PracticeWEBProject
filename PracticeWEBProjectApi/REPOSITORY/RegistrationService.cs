@@ -90,7 +90,7 @@ namespace PracticeWEBProjectApi.REPOSITORY
             }
         }
 
-        public async Task<RegistrationDTO> Registration_Delete(RegistrationDTO reg)
+        public async Task<RegistrationDTO> Registration_Delete(RegistrationDTO reg,int id)
         {
             using (var connection = _dBContext.CreateConnection())
             {
@@ -99,7 +99,7 @@ namespace PracticeWEBProjectApi.REPOSITORY
                 {
                     DynamicParameters param = new DynamicParameters();
                     param.Add("@Id", reg.Id, dbType: DbType.Int64, direction: ParameterDirection.Input);
-                    param.Add("@DeletedBy", reg.UpdatedBy, dbType: DbType.Int64, direction: ParameterDirection.Input);
+                   
 
                     var Task = connection.QueryMultiple("sp_GetById_Registration_Delete", param, commandTimeout: 600, commandType: CommandType.StoredProcedure);
                     return Task.Read<RegistrationDTO>().FirstOrDefault();

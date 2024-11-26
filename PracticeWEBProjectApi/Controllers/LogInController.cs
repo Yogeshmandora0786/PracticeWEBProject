@@ -42,5 +42,32 @@ namespace PracticeWEBProjectApi.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+         [HttpPost]
+        [Route("Login_Upsert")]
+        public async Task<IActionResult> LoginUpsert([FromBody] LoginDTO login)
+        {
+            if (login == null)
+            {
+                return BadRequest("Login data is required.");
+            }
+
+            try
+            {
+                // Calling the Login_Upsert method in the service
+                var result = await _loginService.Login_Upsert(login);
+
+                if (result == null)
+                {
+                    return NotFound("Login upsert failed.");
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }
+
