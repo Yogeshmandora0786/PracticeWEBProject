@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticeWEBProjectApi", "PracticeWEBProjectApi\PracticeWEBProjectApi.csproj", "{9B7032EF-9B74-47ED-AFFF-828A43BEE9CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PracticeWEBProjectApi", "PracticeWEBProjectApi\PracticeWEBProjectApi.csproj", "{9B7032EF-9B74-47ED-AFFF-828A43BEE9CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticeWEBProjectWEB", "PracticeWEBProjectWEB\PracticeWEBProjectWEB.csproj", "{0933AC35-20F7-4571-9DCA-D60CCBA1FB19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PracticeWEBProjectWEB", "PracticeWEBProjectWEB\PracticeWEBProjectWEB.csproj", "{0933AC35-20F7-4571-9DCA-D60CCBA1FB19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
