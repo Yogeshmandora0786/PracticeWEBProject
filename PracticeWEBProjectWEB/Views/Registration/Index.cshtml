@@ -14,21 +14,21 @@
 <body>
     <!-- Wrapper for centering content -->
     <div class="wrapper">
-        <!-- Sign Up Form -->
+        <!-- Sign-Up Form -->
         <div class="form-wrapper sign-up">
-            <form action="@Url.Action("Index", "Registration")" method="post">
+            <form id="signUpForm" method="post" action="@Url.Action("Index", "Registration")">
                 <h2>Sign Up</h2>
 
                 <!-- Username Input -->
                 <div class="input-group">
-                    <input type="text" name="Username" required>
-                    <label for="Username">Username</label>
+                    <input type="text" id="username" name="Username" required>
+                    <label for="username">Username</label>
                 </div>
 
                 <!-- Email Input -->
                 <div class="input-group">
-                    <input type="email" name="Email" required>
-                    <label for="Email">Email</label>
+                    <input type="email" id="email" name="Email" required>
+                    <label for="email">Email</label>
                 </div>
 
                 <!-- Password Input -->
@@ -55,19 +55,16 @@
                     </i>
                 </div>
 
-                <!-- Terms Checkbox -->
-               @*  <div class="remember">
-                    <label><input type="checkbox" name="terms" required> I agree to the terms & conditions</label>
-                </div> *@
-
                 <!-- Submit Button -->
                 <button type="submit">Sign Up</button>
+
+                <!-- Response Message -->
+                <div id="responseMessage" style="color: red; margin-top: 10px;"></div>
 
                 <!-- Sign In Link -->
                 <div class="signUp-link">
                     <p>Already have an account? <a href="@Url.Action("Login", "Registration")" class="signUpBtn-link">Sign In</a></p>
                 </div>
-
             </form>
         </div>
     </div>

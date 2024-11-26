@@ -14,7 +14,7 @@
     <div class="wrapper">
         <div class="form-wrapper">
             <h2>Login</h2>
-            <form method="post" action="@Url.Action("Login", "Registration")">
+            <form id="loginForm" method="post" action="@Url.Action("Login", "Registration")">
                 <div class="input-group">
                     <input type="text" id="username" name="username" placeholder="Username" required />
                 </div>
@@ -28,15 +28,11 @@
                        onmouseout="hidePassword('password')">
                     </i>
                 </div>
-                @* <div class="remember">
-                    <input type="checkbox" id="rememberMe" name="rememberMe" />
-                    <label for="rememberMe">Remember Me</label>
-                </div> *@
                 <button type="submit">Login</button>
+                <div id="responseMessage" style="color: red; margin-top: 10px;"></div>
                 <div class="forgot-password-link">
                     <a href="@Url.Action("ForgotPasswoerd", "Registration")">Forgot Password?</a>
                 </div>
-
                 <div class="signUp-link">
                     <p>
                         Don't have an account? <a href="@Url.Action("Index", "Registration")" class="signUpBtn-link">Sign Up</a>
@@ -45,6 +41,7 @@
             </form>
         </div>
     </div>
+
     <script>
         // Function to show password
         function showPassword(id) {
