@@ -35,6 +35,10 @@ namespace PracticeWEBProjectApi.Controllers
         {
             try
             {
+                if (reg == null)
+                {
+                    return BadRequest(new { success = false, message = "Invalid input data" });
+                }
                 var res = await _registrationService.Registration_Upsert(reg);
 
                 return Ok(res);
