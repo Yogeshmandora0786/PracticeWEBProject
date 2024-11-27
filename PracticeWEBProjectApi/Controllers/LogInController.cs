@@ -17,43 +17,54 @@ namespace PracticeWEBProjectApi.Controllers
             _loginService = loginService;
         }
 
-        [HttpPost]
-        [Route("Login_Active_Inactive")]
-        public async Task<IActionResult> LoginActiveInactive([FromBody] LoginDTO loginDto)
-        {
-            try
-            {
-                if (loginDto == null || loginDto.Id == 0)
-                {
-                    return BadRequest("Invalid login data.");
-                }
+        //[HttpGet]
+        //[Route("Login_Active_Inactive")]
+        //public async Task<IActionResult> Login_Active_Inactive([FromQuery] int id)
+        //{
+        //    try
+        //    {
+        //        if (id == 0)
+        //        {
+        //            return BadRequest("Invalid login ID.");
+        //        }
 
-                var result = await _loginService.Login_Active_Inactive(loginDto);
+        //        // Create a new LoginDTO with the provided ID
+        //        var loginDto = new LoginDTO { Id = id };
 
-                if (result == null)
-                {
-                    return NotFound("Login not found or failed to update.");
-                }
+        //        var result = await _loginService.Login_Active_Inactive(loginDto);
 
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-         [HttpPost]
+        //        if (result == null)
+        //        {
+        //            return NotFound("Login not found or failed to update.");
+        //        }
+
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Internal server error: {ex.Message}");
+        //    }
+        //}
+
+        [HttpGet]
         [Route("Login_Upsert")]
-        public async Task<IActionResult> LoginUpsert([FromBody] LoginDTO login)
+        public async Task<IActionResult> Login_Upsert([FromQuery] string userName, [FromQuery] string password)
         {
-            if (login == null)
+            if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password))
             {
-                return BadRequest("Login data is required.");
+                return BadRequest("UserName and Password are required.");
             }
 
             try
             {
-                // Calling the Login_Upsert method in the service
+                
+                var login = new LoginDTO
+                {
+                    UserName = userName,
+                    Password = password
+                };
+
+                
                 var result = await _loginService.Login_Upsert(login);
 
                 if (result == null)
@@ -68,6 +79,8 @@ namespace PracticeWEBProjectApi.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+
     }
 }
 
