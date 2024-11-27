@@ -19,7 +19,7 @@ namespace PracticeWEBProjectApi.Controllers
 
         [HttpPost]
         [Route("Login_Active_Inactive")]
-        public async Task<IActionResult> LoginActiveInactive([FromBody] LoginDTO loginDto)
+        public async Task<IActionResult> Login_Active_Inactive([FromBody] LoginDTO loginDto)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace PracticeWEBProjectApi.Controllers
         }
          [HttpPost]
         [Route("Login_Upsert")]
-        public async Task<IActionResult> LoginUpsert([FromBody] LoginDTO login)
+        public async Task<IActionResult> Login_Upsert([FromBody] LoginDTO login)
         {
             if (login == null)
             {
