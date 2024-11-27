@@ -70,14 +70,20 @@
     </div>     
     <script>
 
-                function SignUp(event) {
+                    function SignUp(event) {
             event.preventDefault(); // Prevent default form submission
 
             // Get form values
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+            // Validation for empty fields
+            if (!username || !email || !password || !confirmPassword) {
+                document.getElementById('responseMessage').textContent = "All fields are required!";
+                return;
+            }
 
             // Validation for password confirmation
             if (password !== confirmPassword) {
@@ -85,8 +91,11 @@
                 return;
             }
 
+            // Clear previous response message
+            document.getElementById('responseMessage').textContent = "";
+
             // Create FormData object
-            var formData = new FormData();
+            const formData = new FormData();
             formData.append("Username", username);
             formData.append("Email", email);
             formData.append("Password", password);
@@ -105,7 +114,7 @@
 
             // AJAX request to send form data to the backend
             $.ajax({
-                url:'https://localhost:7146/api/Registration_Upsert' , // Replace with your actual backend URL
+                url: 'https://localhost:7146/api/RegistrationApi/Registration_Upsert',
                 type: 'POST',
                 data: formData,
                 contentType: false,
@@ -118,9 +127,10 @@
                                 icon: 'success',
                                 title: 'Sign Up Successful',
                                 text: 'Your account has been created successfully!',
+                            }).then(() => {
+                                // Redirect to login page after successful sign-up
+                                window.location.href = '/Registration/Login'; // Replace with your actual login URL
                             });
-                            // Redirect to login page after successful sign-up
-                            window.location.href = '@Url.Action("Login", "Registration")';
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -143,6 +153,7 @@
                 }
             });
         }
+
 
         // Function to show password
         function showPassword(id) {
