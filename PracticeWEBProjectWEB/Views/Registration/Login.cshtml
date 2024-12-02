@@ -15,7 +15,7 @@
     <div class="wrapper">
         <div class="form-wrapper">
             <h2>Login</h2>
-            <form id="loginForm" method="post" action="@Url.Action("Login", "Registration")">
+            <form id="loginForm">
                 <div class="input-group">
                     <input type="text" id="username" name="username" placeholder="Username" required />
                 </div>
@@ -58,19 +58,19 @@
             formData.append("Password", password);
 
             // Show loading alert using SweetAlert
-            Swal.fire({
-                title: 'Logging in...',
-                text: 'Please wait while we log you in.',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                didOpen: () => {
-                    Swal.showLoading();  // Display loader
-                }
-            });
+            // Swal.fire({
+            //     title: 'Logging in...',
+            //     text: 'Please wait while we log you in.',
+            //     allowOutsideClick: false,
+            //     showConfirmButton: false,
+            //     didOpen: () => {
+            //         Swal.showLoading();  // Display loader
+            //     }
+            // });
 
             // AJAX request to send form data
             $.ajax({
-                url: 'https://localhost:7146/api/LogInController/LoginActiveInactive', // Update with your backend URL
+                url: 'https://localhost:7146/api/Login/Login_Upsert', // Update with your backend URL
                 type: 'POST',
                 data: formData,
                 contentType: false,
