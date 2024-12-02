@@ -58,9 +58,21 @@ namespace PracticeWEBProjectApi.REPOSITORY
                     param.Add("@UserType", reg.UserType, dbType: DbType.String, direction: ParameterDirection.Input);
                     param.Add("@IsLock", reg.IsLock, dbType: DbType.Boolean, direction: ParameterDirection.Input);
                     param.Add("@UserName", reg.UserName, dbType: DbType.String, direction: ParameterDirection.Input);
+                    param.Add("@IsDelete", reg.IsDelete, dbType: DbType.Boolean, direction: ParameterDirection.Input);
+
                     // Execute the stored procedure and retrieve the result
                     var task = await connection.QueryMultipleAsync("sp_Registration_Upsert", param, commandTimeout: 600, commandType: CommandType.StoredProcedure);
-                    return task.Read<RegistrationDTO>().FirstOrDefault();
+                    var result = task.Read<RegistrationDTO>().FirstOrDefault();
+
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                    else
+                    {
+                        // Return null if no result is found (could be due to an error or invalid data)
+                        return null;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -69,26 +81,27 @@ namespace PracticeWEBProjectApi.REPOSITORY
             }
         }
 
-        public async Task<RegistrationDTO> Registration_Active_Inactive(RegistrationDTO reg)
-        {
-            using (var connection = _dBContext.CreateConnection())
-            {
 
-                try
-                {
-                    DynamicParameters param = new DynamicParameters();
-                    param.Add("@Id", reg.Id, dbType: DbType.Int64, direction: ParameterDirection.Input);
-                    param.Add("@UpdatedBy", reg.DeletedBy, dbType: DbType.Int64, direction: ParameterDirection.Input);
+        //public async Task<RegistrationDTO> Registration_Active_Inactive(RegistrationDTO reg)
+        //{
+        //    using (var connection = _dBContext.CreateConnection())
+        //    {
 
-                    var task = connection.QueryMultiple("sp_Registration_Active_Inactive", param, commandTimeout: 600, commandType: CommandType.StoredProcedure);
-                    return task.Read<RegistrationDTO>().FirstOrDefault();
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            }
-        }
+        //        try
+        //        {
+        //            DynamicParameters param = new DynamicParameters();
+        //            param.Add("@Id", reg.Id, dbType: DbType.Int64, direction: ParameterDirection.Input);
+        //            param.Add("@UpdatedBy", reg.DeletedBy, dbType: DbType.Int64, direction: ParameterDirection.Input);
+
+        //            var task = connection.QueryMultiple("sp_Registration_Active_Inactive", param, commandTimeout: 600, commandType: CommandType.StoredProcedure);
+        //            return task.Read<RegistrationDTO>().FirstOrDefault();
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw ex;
+        //        }
+        //    }
+        //}
 
         public async Task<RegistrationDTO> Registration_Delete(int id)
         {

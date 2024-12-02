@@ -39,15 +39,24 @@ namespace PracticeWEBProjectApi.Controllers
                 {
                     return BadRequest(new { success = false, message = "Invalid input data" });
                 }
+
+                // Call the service to insert/update registration
                 var res = await _registrationService.Registration_Upsert(reg);
+
+                if (res == null)
+                {
+                    return NotFound(new { success = false, message = "Registration failed. No data returned." });
+                }
 
                 return Ok(res);
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                // Log the exception for troubleshooting
+                return StatusCode(500, new { success = false, message = $"Internal server error: {ex.Message}" });
             }
         }
+
 
         [HttpPost]
         [Route("Registration_Delete/{id}")]
@@ -65,20 +74,20 @@ namespace PracticeWEBProjectApi.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("Registration_Active_Inactive")]
-        public async Task<IActionResult> Registration_Active_Inactive(RegistrationDTO reg)
-        {
-            try
-            {
-                var res = await _registrationService.Registration_Active_Inactive(reg);
-                return Ok(res);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "An error occurred while updating the area.", details = ex.Message });
-            }
-        }
+        //[HttpPost]
+        //[Route("Registration_Active_Inactive")]
+        //public async Task<IActionResult> Registration_Active_Inactive(RegistrationDTO reg)
+        //{
+        //    try
+        //    {
+        //        var res = await _registrationService.Registration_Active_Inactive(reg);
+        //        return Ok(res);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { message = "An error occurred while updating the area.", details = ex.Message });
+        //    }
+        //}
 
         [HttpGet]
         [Route("Registration_ById/{Id}")]

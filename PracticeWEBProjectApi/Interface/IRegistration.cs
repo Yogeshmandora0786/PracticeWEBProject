@@ -12,7 +12,7 @@ namespace PracticeWEBProjectApi.Interface
         Task<RegistrationDTO> Registration_Delete(int id);
 
         Task<RegistrationDTO> Registration_ById(int Id);
-        Task<RegistrationDTO> Registration_Active_Inactive(RegistrationDTO reg);
+        //Task<RegistrationDTO> Registration_Active_Inactive(RegistrationDTO reg);
     }
 }
 

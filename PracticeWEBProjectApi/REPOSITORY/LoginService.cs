@@ -17,39 +17,39 @@ namespace PracticeWEBProjectApi.REPOSITORY
             _configuration = configuration;
         }
 
-        public async Task<RegistrationDTO> Login_Active_Inactive(LoginDTO log)
+        public async Task<CommonResponceDTO> Login_Active_Inactive(LoginDTO log)
         {
             using (var connection = _dBContext.CreateConnection())
             {
                 try
                 {
-                    DynamicParameters param = new DynamicParameters();
-                    param.Add("@Id", log.id, dbType: DbType.Int64, direction: ParameterDirection.Input);
+                    // Prepare parameters for the stored procedure
+                    var param = new DynamicParameters();
+                    param.Add("@UserName", log.UserName, dbType: DbType.String, direction: ParameterDirection.Input);
+                    param.Add("@Password", log.Password, dbType: DbType.String, direction: ParameterDirection.Input);
 
-                    var task = connection.QueryMultiple("sp_Login_Active_Inactive", param, commandTimeout: 600, commandType: CommandType.StoredProcedure);
+                    // Execute the stored procedure and retrieve the result
+                    var result = await connection.QueryMultipleAsync(
+                        "sp_Login_Active_Inactive",
+                        param,
+                        commandTimeout: 600,
+                        commandType: CommandType.StoredProcedure
+                    );
 
-                    var loginResult = task.Read<LoginDTO>().FirstOrDefault();
+                    // Map the result to a CommonResponceDTO (assuming it needs to be mapped)
+                    var response = result.Read<CommonResponceDTO>().FirstOrDefault();
 
-                    if (loginResult != null)
-                    {
-                            RegistrationDTO registration = new RegistrationDTO
-                        {
-                           Id = loginResult.id,
-                     
-                           // UserName = loginResult.UserName, 
-                        };
-
-                        return registration;
-                    }
-
-                    return null;
+                    return response; // Return the response, or null if no result is found
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    // Log the exception for troubleshooting (optional, depends on logging framework)
+                    throw new ApplicationException("An error occurred while processing the login request.", ex);
                 }
             }
         }
+
+
 
         //public async Task<LoginDTO> Login_Upsert(LoginDTO login)
         //{
@@ -62,7 +62,7 @@ namespace PracticeWEBProjectApi.REPOSITORY
         //          //  param.Add("@Id", login.Id, dbType: DbType.Int32, direction: ParameterDirection.Input);
         //            param.Add("@UserName", login.UserName, dbType: DbType.String, direction: ParameterDirection.Input);
         //            param.Add("@Password", login.Password, dbType: DbType.String, direction: ParameterDirection.Input);
-                   
+
 
         //            // Execute the stored procedure and retrieve the result
         //            var task = await connection.QueryMultipleAsync("sp_Login_Upsert", param, commandTimeout: 600, commandType: CommandType.StoredProcedure);
