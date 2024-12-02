@@ -17,25 +17,59 @@ namespace PracticeWEBProjectApi.Controllers
             _loginService = loginService;
         }
 
+
+        [HttpGet]
+        [Route("Login_Active_Inactive")]
+        public async Task<ActionResult<RegistrationDTO>> Login_Active_Inactive([FromQuery] int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest("Invalid login data.");
+            }
+
+            try
+            {
+                var loginDto = new LoginDTO { id = id };
+                var result = await _loginService.Login_Active_Inactive(loginDto);
+
+                if (result == null)
+                {
+                    return NotFound("No registration found.");
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // Log exception if necessary
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+
+
         //[HttpGet]
-        //[Route("Login_Active_Inactive")]
-        //public async Task<IActionResult> Login_Active_Inactive([FromQuery] int id)
+        //[Route("Login_Upsert")]
+        //public async Task<IActionResult> Login_Upsert([FromQuery] string userName, [FromQuery] string password)
         //{
         //    try
         //    {
-        //        if (id == 0)
+        //        if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
         //        {
-        //            return BadRequest("Invalid login ID.");
+        //            return BadRequest("UserName and Password are required.");
         //        }
 
-        //        // Create a new LoginDTO with the provided ID
-        //        var loginDto = new LoginDTO { Id = id };
+        //        var login = new LoginDTO
+        //        {
+        //            UserName = userName,
+        //            Password = password
+        //        };
 
-        //        var result = await _loginService.Login_Active_Inactive(loginDto);
+        //        var result = await _loginService.Login_Upsert(login);
 
         //        if (result == null)
         //        {
-        //            return NotFound("Login not found or failed to update.");
+        //            return NotFound("Unable to upsert login details.");
         //        }
 
         //        return Ok(result);
@@ -45,40 +79,6 @@ namespace PracticeWEBProjectApi.Controllers
         //        return StatusCode(500, $"Internal server error: {ex.Message}");
         //    }
         //}
-
-        [HttpGet]
-        [Route("Login_Upsert")]
-        public async Task<IActionResult> Login_Upsert([FromQuery] string userName, [FromQuery] string password)
-        {
-            if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password))
-            {
-                return BadRequest("UserName and Password are required.");
-            }
-
-            try
-            {
-                
-                var login = new LoginDTO
-                {
-                    UserName = userName,
-                    Password = password
-                };
-
-                
-                var result = await _loginService.Login_Upsert(login);
-
-                if (result == null)
-                {
-                    return NotFound("Login upsert failed.");
-                }
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
 
 
     }

@@ -2,9 +2,8 @@
 
 namespace PracticeWEBProjectApi.Interface
 {
-    public interface ILogin // Change from class to interface
+    public interface ILogin
     {
-      //  Task<RegistrationDTO> Login_Active_Inactive(LoginDTO log);
-        Task<LoginDTO> Login_Upsert(LoginDTO login);
+        Task<RegistrationDTO> Login_Active_Inactive(LoginDTO log);
     }
 }
