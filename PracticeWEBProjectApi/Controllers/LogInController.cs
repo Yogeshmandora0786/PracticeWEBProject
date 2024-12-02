@@ -20,28 +20,32 @@ namespace PracticeWEBProjectApi.Controllers
 
         [HttpGet]
         [Route("Login_Active_Inactive")]
-        public async Task<ActionResult<RegistrationDTO>> Login_Active_Inactive([FromQuery] int id)
+        public async Task<ActionResult<RegistrationDTO>> Login_Active_Inactive([FromQuery] string UserName, [FromQuery] string Password)
         {
-            if (id == 0)
+         
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password))
             {
-                return BadRequest("Invalid login data.");
+                return BadRequest("Username and Password are required.");
             }
 
             try
             {
-                var loginDto = new LoginDTO { id = id };
+                var loginDto = new LoginDTO
+                {
+                    UserName = UserName,
+                    Password = Password
+                };
+
                 var result = await _loginService.Login_Active_Inactive(loginDto);
 
                 if (result == null)
                 {
-                    return NotFound("No registration found.");
+                    return Unauthorized("Invalid username or password, or the account is locked.");
                 }
-
-                return Ok(result);
+                return Ok(result);  
             }
             catch (Exception ex)
             {
-                // Log exception if necessary
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }

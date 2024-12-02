@@ -18,5 +18,8 @@
         public bool IsLock { get; set; }
 
         public string UserName { get; set; }
+
+        public bool IsDelete {  get; set; }
+       // public string Message { get; set; }
     }
 }
