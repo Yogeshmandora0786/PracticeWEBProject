@@ -5,12 +5,12 @@ namespace PracticeWEBProjectWEB.Controllers
     public class RegistrationController : Controller
     {
 
-        public IActionResult Login()
-        {
-            return View();
-        }
+        //public IActionResult Login()
+        //{
+        //    return View();
+        //}
 
-        public IActionResult Index()
+        public IActionResult Registration()
         {
             return View();
         }
