@@ -19,6 +19,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<DBContext>();
 builder.Services.AddScoped<IRegistration, RegistrationService>();
 builder.Services.AddScoped<ILogin, LoginService>();
+builder.Services.AddScoped<IBlog, BlogServices>();
 
 
 var app = builder.Build();
