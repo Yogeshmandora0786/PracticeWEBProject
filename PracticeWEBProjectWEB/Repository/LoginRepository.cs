@@ -4,6 +4,7 @@ using PracticeWEBProject.Dto;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text;
+using PracticeWEBProjectWEB.Dto;
 
 namespace PracticeWEBProject.Repository
 {
@@ -23,24 +24,29 @@ namespace PracticeWEBProject.Repository
         {
             try
             {
-                var serializedItemToCreate = JsonConvert.SerializeObject(loginModel);
+                var serializedItemToCreate = JsonConvert.SerializeObject(loginModel.Username);
                 var content = new StringContent(serializedItemToCreate, Encoding.UTF8, "application/json");
 
+                // Construct the URL with query parameters
+                string url = $"{_baseUrl}api/Login/Login_Active_Inactive?UserName={loginModel.Username}&Password={loginModel.Password}";
+
                 // Use the base URL to make the POST request
-                var response = await _client.PostAsync(_baseUrl + "SignIn", content);
+                var response = await _client.PostAsync(url, null); // Assuming no request body
+
 
                 if (response.IsSuccessStatusCode)
                 {
                     var responseContent = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<CommonResponseModel>(responseContent);
+                    var jsondata = JsonConvert.DeserializeObject<CommonResponseModel>(responseContent);
+                    return jsondata;
                 }
                 else
                 {
                     Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
                     return new CommonResponseModel
                     {
-                        IsSuccess = false,
-                        Message = "Login failed. Please check your credentials."
+                        ResponseCode = 0, // Adjust according to your application's logic (e.g., failure status code)
+                        ResponseMessage = "Login failed. Please check your credentials."
                     };
                 }
             }
@@ -49,10 +55,11 @@ namespace PracticeWEBProject.Repository
                 Console.WriteLine($"Exception: {ex.Message}");
                 return new CommonResponseModel
                 {
-                    IsSuccess = false,
-                    Message = $"An error occurred: {ex.Message}"
+                    ResponseCode = 0, // Adjust failure code
+                    ResponseMessage = $"An error occurred: {ex.Message}"
                 };
             }
+
         }
     }
 }

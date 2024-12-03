@@ -1,30 +1,29 @@
-﻿function SignIn(event) {
-    event.preventDefault(); // Prevent default form submission
+﻿function Login(event) {
+    event.preventDefault(); // Prevent form submission
 
-    // Get form values
+    // Get user input
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value.trim();
 
-    // Validate input fields
+    // Validate inputs
     if (!username || !password) {
         Swal.fire({
             icon: 'warning',
             title: 'Missing Fields',
-            text: 'Both username and password are required!',
+            text: 'Please enter both username and password!',
         });
         return;
     }
 
-    // Prepare payload
-    const payload = {
-        Username: username,
-        Password: password,
-    };
+    // Create FormData object to send the login data
+    const formData = new FormData();
+    formData.append('Username', username);
+    formData.append('Password', password);
 
     // Show loading alert
     Swal.fire({
         title: 'Logging In...',
-        text: 'Please wait while we log you in.',
+        text: 'Please wait while we process your request.',
         allowOutsideClick: false,
         showConfirmButton: false,
         didOpen: () => {
@@ -32,38 +31,40 @@
         },
     });
 
-    // Make the API call using fetch
-    fetch('https://localhost:7146/api/Login/Login_Upsert', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
+    // Make the AJAX request
+    $.ajax({
+        url: '/Login/LoginPost',
+        type: 'POST',
+        data: formData,
+        contentType: false,  // Let the browser set the content type
+        processData: false,  // Let jQuery handle the FormData
+        success: function (response) {
+            setTimeout(() => { // Set timeout to display the loader for a minimum time
+                Swal.close(); // Close the loader after a delay
+                if (response.responseCode === 200) {
+                    console.log("Redirecting to /Home/Index");
+                    window.location.href = '/Home/Index';
+                } else {
+                    console.error("Invalid Login:", response);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Login Failed',
+                        text: response.responseMessage,
+                    });
+                }
+            }, 1000); // Loader will show for at least 1 second before closing
         },
-        body: JSON.stringify(payload),
-    })
-        .then(async (response) => {
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Invalid username or password.');
-            }
-            return response.json();
-        })
-        .then((data) => {
-            Swal.close();
-            Swal.fire({
-                icon: 'success',
-                title: 'Login Successful',
-                text: 'You have successfully logged in!',
-            }).then(() => {
-                // Redirect to home page
-                window.location.href = '/Home/Index';
-            });
-        })
-        .catch((error) => {
-            Swal.close();
-            Swal.fire({
-                icon: 'error',
-                title: 'Login Failed',
-                text: error.message || 'An error occurred during the login process. Please try again.',
-            });
-        });
+        error: function (xhr, status, error) {
+            setTimeout(() => {
+                Swal.close(); // Close the loader after a delay
+                console.error("AJAX Error:", status, error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred during the login process.',
+                });
+            }, 1000); // Loader will show for at least 1 second before closing
+        }
+    });
 }
+

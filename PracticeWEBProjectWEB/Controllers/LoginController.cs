@@ -20,36 +20,26 @@ namespace PracticeWEBProject.Controllers
         }
 
         [HttpPost]
-        [ActionName("Login")]
         public async Task<IActionResult> LoginPost(LoginViewModel loginModel)
         {
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    var response = await _loginRepository.LoginAsync(loginModel);
+                // Attempt to authenticate the user
+                var response = await _loginRepository.LoginAsync(loginModel);
 
-                    if (response != null && response.IsSuccess)
-                    {
-                        // Redirect to home on successful login
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                    {
-                        // Return error if login fails
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt or user is inactive.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Log the exception and return a generic error
-                    Console.WriteLine($"Login error: {ex.Message}");
-                    ModelState.AddModelError(string.Empty, "An unexpected error occurred. Please try again.");
-                }
+                // Return success response with the response data
+                return Ok(response);
             }
+            catch (Exception ex)
+            {
+                // Log the exception message for debugging
+                Console.WriteLine($"Login error: {ex.Message}");
 
-            // Return the same view with validation errors
-            return View("Login", loginModel);
+                // Return an internal server error with a generic message
+                return StatusCode(500, "An unexpected error occurred. Please try again later.");
+            }
         }
+
     }
 }
