@@ -8,5 +8,9 @@ namespace PracticeWEBProjectApi.Interface
         Task<BlogDTO> Blog_ById(int Blogid);
         Task<CommonResponceDTO> Blog_Delete(int Blogid);
 
+        Task<CommonResponceDTO> Blog_active_inactive(int Blogid);
+
+        Task<BlogDTO> Blog_Upsert(BlogDTO blog);
+
     }
 }

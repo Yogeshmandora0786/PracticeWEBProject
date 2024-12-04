@@ -3,6 +3,7 @@ using PracticeWEBProjectApi.Interface;
 using PracticeWEBProjectApi.Models;
 using PracticeWEBProjectApi.REPOSITORY;
 using PracticeWEBProjectApi.DTO;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,4 +35,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Images/BlogImages")),
+    RequestPath = new PathString("/Images/BlogImages")
+});
+
 app.Run();
