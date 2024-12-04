@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PracticeWEBProjectApi.DTO;
 using PracticeWEBProjectApi.Interface;
 using PracticeWEBProjectApi.REPOSITORY;
 
@@ -53,5 +54,104 @@ namespace PracticeWEBProjectApi.Controllers
                 return StatusCode(500, "Internal server error. Please try again later.");
             }
         }
+        [HttpPost]
+        [Route("DeleteBlog")]
+        public async Task<IActionResult> DeleteBlog( int Blogid)
+        {
+            try
+            {
+                // Call the Blog_Delete method in the service
+                var response = await _blogServices.Blog_Delete(Blogid);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return StatusCode(500, "Internal server error. Please try again later.");
+            }
+        }
+
+        [HttpPost]
+        [Route("ActivateDeactivate")]
+        public async Task<IActionResult> BlogActiveInactive(int Blogid)
+        {
+            try
+            {
+                var response = await _blogServices.Blog_active_inactive(Blogid);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while processing your request.", Error = ex.Message });
+            }
+        }
+
+
+        [HttpPost]
+        [Route("Blog_Upsert")]
+        public async Task<IActionResult> Blog_Upsert(BlogDTO blog)
+        {
+            try
+            {
+                string path = "";
+                string ImagePathURL = "";
+
+                try
+                {
+                    if (blog.ImagePath != null)
+                    {
+
+                        if (!string.IsNullOrEmpty(ImagePathURL) && System.IO.File.Exists(ImagePathURL))
+                        {
+                            System.IO.File.Delete(ImagePathURL);
+                        }
+
+                        path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "Images/BlogImages"));
+                        var newFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + Path.GetExtension(blog.ImagePath.FileName);
+                        var fileSize = blog.ImagePath.Length;
+
+                        if (fileSize > (5 * 1024 * 1024))
+                        {
+                            return BadRequest(new { Message = $"{blog.ImagePath.FileName}'s file size is larger than 5MB." });
+                        }
+
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+
+
+                        using (var fileStream = new FileStream(Path.Combine(path, newFileName), FileMode.Create))
+                        {
+                            await blog.ImagePath.CopyToAsync(fileStream);
+                        }
+
+                        blog.BlogImage = Path.Combine("Images/BlogImages", newFileName);
+                    }
+                    else
+                    {
+                        blog.BlogImage = ImagePathURL; // Retain the old image if a new one isn't provided
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("File upload failed", ex);
+                }
+
+                var result = await _blogServices.Blog_Upsert(blog);
+
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+
+                return BadRequest(new { Message = "Blog upsert failed." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = ex.Message });
+            }
+        }
     }
 }
+

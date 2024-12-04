@@ -20,7 +20,7 @@ namespace PracticeWEBProjectApi.Controllers
 
         [HttpGet]
         [Route("Login_Active_Inactive")]
-        public async Task<ActionResult<RegistrationDTO>> Login_Active_Inactive([FromQuery] string UserName, [FromQuery] string Password)
+        public async Task<ActionResult<RegistrationDTO>> Login_Active_Inactive( string UserName, string Password)
         {
          
             if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password))

@@ -31,7 +31,7 @@ namespace PracticeWEBProjectApi.Controllers
         }
         [HttpPost]
         [Route("Registration_Upsert")]
-        public async Task<IActionResult> Registration_Upsert([FromBody] RegistrationDTO reg)
+        public async Task<IActionResult> Registration_Upsert(RegistrationDTO reg)
         {
             try
             {

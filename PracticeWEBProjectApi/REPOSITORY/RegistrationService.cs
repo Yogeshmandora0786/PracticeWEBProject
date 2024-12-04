@@ -4,6 +4,10 @@ using Dapper;
 using System.Data;
 using PracticeWEBProjectApi.DTO;
 using PracticeWEBProjectApi.Controllers;
+using Microsoft.EntityFrameworkCore;
+using static Dapper.SqlMapper;
+using System.Threading.Tasks;
+using System;
 
 namespace PracticeWEBProjectApi.REPOSITORY
 {
@@ -48,17 +52,17 @@ namespace PracticeWEBProjectApi.REPOSITORY
                     param.Add("@Email", reg.Email, dbType: DbType.String, direction: ParameterDirection.Input);
                     param.Add("@Phone", reg.Phone, dbType: DbType.String, direction: ParameterDirection.Input);
                     param.Add("@Password", reg.Password, dbType: DbType.String, direction: ParameterDirection.Input);
-                    param.Add("@IsActive", reg.IsActive, dbType: DbType.Boolean, direction: ParameterDirection.Input);
-                    param.Add("@CreateDate", reg.CreateDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
-                    param.Add("@CreatedBy", reg.CreatedBy, dbType: DbType.Int64, direction: ParameterDirection.Input);
-                    param.Add("@UpdateDate", reg.UpdateDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
-                    param.Add("@UpdatedBy", reg.UpdatedBy, dbType: DbType.Int64, direction: ParameterDirection.Input);
-                    param.Add("@DeleteDate", reg.DeleteDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
-                    param.Add("@DeletedBy", reg.DeletedBy, dbType: DbType.Int64, direction: ParameterDirection.Input);
+           //         param.Add("@IsActive", reg.IsActive, dbType: DbType.Boolean, direction: ParameterDirection.Input);
+           //         param.Add("@CreateDate", reg.CreateDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
+                    param.Add("@CreatedBy", reg.CreatedBy, dbType: DbType.String, direction: ParameterDirection.Input);
+           //         param.Add("@UpdateDate", reg.UpdateDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
+                    param.Add("@UpdatedBy", reg.UpdatedBy, dbType: DbType.String, direction: ParameterDirection.Input);
+           //         param.Add("@DeleteDate", reg.DeleteDate, dbType: DbType.DateTime, direction: ParameterDirection.Input);
+           //         param.Add("@DeletedBy", reg.DeletedBy, dbType: DbType.Int64, direction: ParameterDirection.Input);
                     param.Add("@UserType", reg.UserType, dbType: DbType.String, direction: ParameterDirection.Input);
                     param.Add("@IsLock", reg.IsLock, dbType: DbType.Boolean, direction: ParameterDirection.Input);
                     param.Add("@UserName", reg.UserName, dbType: DbType.String, direction: ParameterDirection.Input);
-                    param.Add("@IsDelete", reg.IsDelete, dbType: DbType.Boolean, direction: ParameterDirection.Input);
+              //      param.Add("@IsDelete", reg.IsDelete, dbType: DbType.Boolean, direction: ParameterDirection.Input);
 
                     // Execute the stored procedure and retrieve the result
                     var task = await connection.QueryMultipleAsync("sp_Registration_Upsert", param, commandTimeout: 600, commandType: CommandType.StoredProcedure);
@@ -82,21 +86,21 @@ namespace PracticeWEBProjectApi.REPOSITORY
         }
 
 
-        //public async Task<RegistrationDTO> Registration_Active_Inactive(RegistrationDTO reg)
+        //public async task<registrationdto> registration_active_inactive(registrationdto reg)
         //{
-        //    using (var connection = _dBContext.CreateConnection())
+        //    using (var connection = _dbcontext.createconnection())
         //    {
 
         //        try
         //        {
-        //            DynamicParameters param = new DynamicParameters();
-        //            param.Add("@Id", reg.Id, dbType: DbType.Int64, direction: ParameterDirection.Input);
-        //            param.Add("@UpdatedBy", reg.DeletedBy, dbType: DbType.Int64, direction: ParameterDirection.Input);
+        //            dynamicparameters param = new dynamicparameters();
+        //            param.add("@id", reg.id, dbtype: dbtype.int64, direction: parameterdirection.input);
+        //            param.add("@updatedby", reg.deletedby, dbtype: dbtype.int64, direction: parameterdirection.input);
 
-        //            var task = connection.QueryMultiple("sp_Registration_Active_Inactive", param, commandTimeout: 600, commandType: CommandType.StoredProcedure);
-        //            return task.Read<RegistrationDTO>().FirstOrDefault();
+        //            var task = connection.querymultiple("sp_registration_active_inactive", param, commandtimeout: 600, commandtype: commandtype.storedprocedure);
+        //            return task.read<registrationdto>().firstordefault();
         //        }
-        //        catch (Exception ex)
+        //        catch (exception ex)
         //        {
         //            throw ex;
         //        }
