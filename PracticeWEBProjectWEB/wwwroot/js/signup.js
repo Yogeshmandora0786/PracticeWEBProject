@@ -1,18 +1,18 @@
-﻿function SignUp(event) {
-    event.preventDefault(); // Prevent default form submission
+﻿function Register(event) {
+    event.preventDefault(); // Prevent form submission
 
-    // Get form values
+    // Get user input
     const username = document.getElementById('username').value.trim();
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
     const confirmPassword = document.getElementById('confirmPassword').value.trim();
 
-    // Validate input fields
+    // Validate inputs
     if (!username || !email || !password || !confirmPassword) {
         Swal.fire({
             icon: 'warning',
             title: 'Missing Fields',
-            text: 'All fields are required!',
+            text: 'Please fill in all fields!',
         });
         return;
     }
@@ -26,18 +26,16 @@
         return;
     }
 
-    // Prepare payload
-    const payload = {
-        Username: username,
-        Email: email,
-        Password: password,
-        ConfirmPassword: confirmPassword,
-    };
+    // Create FormData object to send the registration data
+    const formData = new FormData();
+    formData.append('Username', username);
+    formData.append('Email', email);
+    formData.append('Password', password);
 
     // Show loading alert
     Swal.fire({
-        title: 'Signing Up...',
-        text: 'Please wait while we create your account.',
+        title: 'Registering...',
+        text: 'Please wait while we process your registration.',
         allowOutsideClick: false,
         showConfirmButton: false,
         didOpen: () => {
@@ -45,38 +43,39 @@
         },
     });
 
-    // Make the API call using fetch
-    fetch('https://localhost:7146/api/RegistrationApi/Registration_Upsert', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
+    // Make the AJAX request
+    $.ajax({
+        url: '/Registration/RegisterPost',  
+        type: 'POST',
+        data: formData,
+        contentType: false,  
+        processData: false, 
+        success: function (response) {
+            setTimeout(() => { 
+                Swal.close(); 
+                if (response.responseCode === 200) {
+                    console.log("Registration successful. Redirecting to login page.");
+                    window.location.href = '/Login/Login'; 
+                } else {
+                    console.error("Registration Failed:", response);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Registration Failed',
+                        text: response.responseMessage, 
+                    });
+                }
+            }, 1000); 
         },
-        body: JSON.stringify(payload),
-    })
-        .then(async (response) => {
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to register.');
-            }
-            return response.json();
-        })
-        .then((data) => {
-            Swal.close();
-            Swal.fire({
-                icon: 'success',
-                title: 'Sign Up Successful',
-                text: 'Your account has been created successfully!',
-            }).then(() => {
-                // Redirect to login page
-                window.location.href = '/Registration/Login';
-            });
-        })
-        .catch((error) => {
-            Swal.close();
-            Swal.fire({
-                icon: 'error',
-                title: 'Sign Up Failed',
-                text: error.message || 'An error occurred during the sign-up process. Please try again.',
-            });
-        });
+        error: function (xhr, status, error) {
+            setTimeout(() => {
+                Swal.close(); 
+                console.error("AJAX Error:", status, error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred during the registration process.',
+                });
+            }, 1000);
+        }
+    });
 }
